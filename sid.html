@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OpenAI Image Generator</title>
+  </head>
+  <body>
+    <h1>OpenAI Image Generator</h1>
+    <form>
+      <label for="keywords">Enter keywords:</label>
+      <input type="text" id="keywords" name="keywords"><br><br>
+      <button type="button" onclick="generateImage()">Generate Image</button>
+    </form>
+    <br><br>
+    <div id="imageContainer"></div>
+    <script>
+    function generateImage() {
+    var apiKey = "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";
+    console.log(apiKey);
+    var keywords = document.getElementById("keywords").value;
+    var apiUrl = "https://api.openai.com/v1/images/generations";
+    var requestData = {
+      "model": "image-alpha-001",
+      "prompt": "Generate an image based on the keywords " + keywords,
+      "num_images": 1,
+      "size": "512x512",
+      "response_format": "url"
+    };
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+      },
+      body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      var imageUrl = data.data[0].url;
+      console.log(imageUrl);
+      var imageHtml = "<img src='" + imageUrl + "'/>";
+      document.getElementById("imageContainer").innerHTML = imageHtml;
+    });
+  }
+    </script>
+  </body>
+</html>
